@@ -1,0 +1,36 @@
+name: codio-publish
+# Run this workflow every time a new commit pushed to your repository branch noted below
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  build:
+  # Set the type of machine to run on - do not change this. Any warnings you may see in workflow actions can be ignored
+    runs-on: ubuntu-latest
+    steps:
+    # Checks out a copy of your repository on the ubuntu-latest machine
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cleanup
+     # removes the following files/folders when publishing
+        run: rm -rf README.md
+
+      - name: Publish to Codio
+        uses: codio/codio-assignment-publish-action@master
+        with:
+          # Use the ID's from the secrets below
+          client-id: ${{ secrets.T1_CLIENT_ID }}
+          secret-id: ${{ secrets.T1_SECRET_ID }}
+          dir: ./
+          course-id: a1b6da04126d9a8e8287b03da76abd06
+          assignment-id: 76b7a64520c7196c8a6f6cd36eb3d6e6
+          # You can also use course-name or assignment-name to reference the course/assignment if you prefer
+          # course-name: your course name
+          # assignment-name: your assignment name
+          changelog: ${{ github.event.head_commit.message }}
+          # Set the domain you are working on - codio.com or codio.co.uk
+          domain: test1-codio.com
